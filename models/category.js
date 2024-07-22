@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const Product = require("./product");
 
 
 
@@ -20,11 +19,13 @@ const Category = sequelize.define('Category',{
     }
 });
 
-//  Définir l'association : Une catégorie a plusieurs produits
-Category.hasMany(Product, {
-    foreignKey : 'categoryId',
-    as : 'product'
-});
-
-
+// Fonction pour définir les associations
+Category.associate = (models) => {
+    Category.hasMany(models.Product, {
+        foreignKey: 'categoryId',
+        as: 'products',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    });
+};
 module.exports = Category;

@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const Category = require("./category");
 
 
 
@@ -22,15 +21,25 @@ const Product = sequelize.define('Product',{
     price : {
         type : DataTypes.STRING,
         allowNull : false
-    }
+    },
+    categoryId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Category',
+            key: 'id'
+        } }
 
 });
 
-//  Définir l'association : Un produit appartient à une catégorie
-Product.belongsTo(Category, {
-    foreignKey : 'categoryId',
-    as : 'category'
-});
+// Fonction pour définir les associations
+Product.associate = (models) => {
+    Product.belongsTo(models.Category, {
+        foreignKey: 'categoryId',
+        as: 'category',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    });
+};
 
 
 module.exports = Product;

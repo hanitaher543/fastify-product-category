@@ -6,9 +6,8 @@ const sequelize = require ('./config/database');
 const PORT = 3000;
 
 
-
-
 // ROUTING
+fastify.register (require ('./routes/router'));
 
 
 
@@ -22,6 +21,7 @@ const start = async () =>  {
         console.log(`Server is running on port ${PORT}`);
         await sequelize.authenticate(); // verifies the connection to the Sequelize database 
         console.log('Connection to database has been established successfully');
+        await sequelize.sync();
 
     } catch (error){
         console.log(`Server failed to start on port ${PORT}`);
