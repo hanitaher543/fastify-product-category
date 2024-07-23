@@ -1,5 +1,8 @@
 const Category = require('../models/category');
-const Product = require ('../models/product')
+const Product  = require ('../models/product');
+const { Op }   = require('sequelize');
+
+
 
 
 async function createProduct (req, res) {
@@ -50,7 +53,30 @@ async function getAllProducts (req, res){
     }
 };
 
+// API REST GET : Get all products who this price greater than 100 registered in the database 
+async function getAllProds(req, res){
+    try{
+         // Fetch all products from the database
+         const products = await Product.findAll({
+            where: {
+                price: {
+                    [Op.gt]: '100' // Using string comparison, but you can convert price to a number if needed
+                }
+            }
+        });
+        console.log(Op)
+         //console.log(products)         
+          // Return the prpducts as response message
+         res.status(200).send({ message :'The products that exist in the database are ', products});
+
+    } catch (error){
+        console.error('Error occurred while fetching products :', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+}; 
+
 
 
 module.exports = createProduct;
 module.exports = getAllProducts;
+module.exports = getAllProds;
